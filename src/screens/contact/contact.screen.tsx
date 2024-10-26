@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatPhoneNumber } from '../../utilities/format-number.utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Roles } from '../../enum/roles.enum';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
@@ -69,6 +70,14 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.number}>{formatPhoneNumber(contact.number)}</Text>
+                <View style={styles.role}>
+                    <Text style={styles.email}>{contact.role}</Text>
+                    {contact.role === Roles.CLIENTE ?
+                        <Icon name="business-center" color={'gray'} size={25} />
+                        :
+                        <Icon name="supervised-user-circle" color={'gray'} size={25} />
+                    }
+                </View>
                 {contact.email && <Text style={styles.email}>{contact.email}</Text>}
             </View>
             <View style={styles.buttonsContainer}>
@@ -120,6 +129,13 @@ const styles = StyleSheet.create({
     email: {
         fontSize: 16,
         color: '#888',
+    },
+    role: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 10,
+        marginVertical: 5,
     },
     buttonsContainer: {
         flexDirection: 'row',

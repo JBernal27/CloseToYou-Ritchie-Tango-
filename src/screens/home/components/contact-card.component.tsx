@@ -5,6 +5,7 @@ import { IContact } from '../../../interfaces/contact.interface';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../router/navigations';
 import { formatPhoneNumber } from '../../../utilities/format-number.utility';
+import { Roles } from '../../../enum/roles.enum';
 
 export default function ContactCard(contact: IContact) {
     const navigate = useNavigation<NavigationProp<RootStackParamList>>();
@@ -24,6 +25,9 @@ export default function ContactCard(contact: IContact) {
         textBox: {
             flexDirection: 'column',
             flex: 1,
+        },
+        iconBox: {
+            width: 30,
         },
         contactName: {
             color: 'black',
@@ -61,6 +65,13 @@ export default function ContactCard(contact: IContact) {
             <View style={styles.textBox}>
                 <Text style={styles.contactName}>{contact.name}</Text>
                 <Text style={styles.contactNumber}>{formatPhoneNumber(contact.number)}</Text>
+            </View>
+            <View style={styles.iconBox}>
+                {contact.role === Roles.CLIENTE ?
+                <Icon name="business-center" color={'gray'} size={25}/>
+                :
+                <Icon name="supervised-user-circle" color={'gray'} size={25}/>
+                }
             </View>
         </TouchableOpacity>
     );

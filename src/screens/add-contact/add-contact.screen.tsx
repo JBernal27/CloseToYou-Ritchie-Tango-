@@ -109,9 +109,10 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
                     selectedValue={role}
                     onValueChange={(itemValue) => setRole(itemValue)}
                     style={styles.picker}
+                    dropdownIconColor={'black'}
                 >
-                    <Picker.Item label="Empleado" value={Roles.EMPLEADO} />
-                    <Picker.Item label="Cliente" value={Roles.CLIENTE} />
+                    <Picker.Item label={Roles.EMPLEADO} value={Roles.EMPLEADO} />
+                    <Picker.Item label={Roles.CLIENTE} value={Roles.CLIENTE} />
                 </Picker>
             </View>
 
@@ -129,8 +130,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 20,
         backgroundColor: '#f5f5f5',
-        gap: 2,
-        marginTop: 25,
+        gap: 1,
     },
     input: {
         width: '100%',
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     image: {
-        width: 250,
-        height: 250,
+        width: 220,
+        height: 220,
         borderRadius: 175,
         marginBottom: 15,
         backgroundColor: '#e0e0e0',
@@ -168,17 +168,22 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     pickerContainer: {
-        width: '100%',
-        marginVertical: 15,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 15,
     },
     pickerLabel: {
         fontSize: 16,
         color: 'black',
         marginBottom: 5,
+        height: 20,
     },
     picker: {
-        height: 50,
         width: '100%',
+        color: 'black',
+        flex: 1,
+        backgroundColor: 'white',
     },
     modalContainer: {
         flex: 1,
@@ -198,3 +203,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
+
+//business-center
+//supervised-user-circle
