@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, TextInput, Button, StyleSheet, ScrollView, Switch, Text, Image, TouchableOpacity, Modal } from 'react-native';
+import { View, TextInput, Button, ScrollView, Switch, Text, Image, TouchableOpacity, Modal } from 'react-native';
 import { RootStackParamList } from '../../router/navigations';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAddContact } from './hooks/use-add-contact.hook';
 import { Picker } from '@react-native-picker/picker'; // Importamos Picker
 import { Roles } from '../../enum/roles.enum';
+import { addContactStyles } from './styles/add-contact.styles';
 
 type AddContactProps = NativeStackScreenProps<RootStackParamList, 'AddContact'>;
 
@@ -31,12 +32,12 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
     } = useAddContact(contact);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={addContactStyles.container}>
             <TouchableOpacity onPress={() => setIsModalVisible(true)}>
                 {imageUri ? (
-                    <Image source={{ uri: imageUri }} style={styles.image} />
+                    <Image source={{ uri: imageUri }} style={addContactStyles.image} />
                 ) : (
-                    <View style={[styles.image]}>
+                    <View style={[addContactStyles.image]}>
                         <Icon name="add-a-photo" size={100} color={'white'} />
                     </View>
                 )}
@@ -48,9 +49,9 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
                 animationType="fade"
                 onRequestClose={() => setIsModalVisible(false)}
             >
-                <View style={styles.modalContainer}>
-                    <Text style={styles.modalContent}>¿Cómo deseas añadir la imagen?</Text>
-                    <View style={styles.modalContent}>
+                <View style={addContactStyles.modalContainer}>
+                    <Text style={addContactStyles.modalContent}>¿Cómo deseas añadir la imagen?</Text>
+                    <View style={addContactStyles.modalContent}>
                         <TouchableOpacity onPress={handleImageSelection}>
                             <Icon name="add-chart" size={50} color="black" />
                         </TouchableOpacity>
@@ -65,7 +66,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
             </Modal>
 
             <TextInput
-                style={styles.input}
+                style={addContactStyles.input}
                 placeholder="Nombre"
                 placeholderTextColor="gray"
                 value={name}
@@ -73,7 +74,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
             />
 
             <TextInput
-                style={styles.input}
+                style={addContactStyles.input}
                 placeholder="Email"
                 placeholderTextColor="gray"
                 value={email}
@@ -82,7 +83,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
             />
 
             <TextInput
-                style={styles.input}
+                style={addContactStyles.input}
                 placeholder="Número"
                 placeholderTextColor="gray"
                 value={number}
@@ -93,8 +94,8 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
                 keyboardType="phone-pad"
             />
 
-            <View style={styles.favoriteContainer}>
-                <Text style={styles.favoriteText}>¿Marcar como favorito?</Text>
+            <View style={addContactStyles.favoriteContainer}>
+                <Text style={addContactStyles.favoriteText}>¿Marcar como favorito?</Text>
                 <Switch
                     value={isFavorite}
                     onValueChange={setIsFavorite}
@@ -103,12 +104,12 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
                 />
             </View>
 
-            <View style={styles.pickerContainer}>
-                <Text style={styles.pickerLabel}>Selecciona un rol:</Text>
+            <View style={addContactStyles.pickerContainer}>
+                <Text style={addContactStyles.pickerLabel}>Selecciona un rol:</Text>
                 <Picker
                     selectedValue={role}
                     onValueChange={(itemValue) => setRole(itemValue)}
-                    style={styles.picker}
+                    style={addContactStyles.picker}
                     dropdownIconColor={'black'}
                 >
                     <Picker.Item label={Roles.EMPLEADO} value={Roles.EMPLEADO} />
@@ -116,93 +117,9 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
                 </Picker>
             </View>
 
-            <View style={styles.buttonContainer}>
+            <View style={addContactStyles.buttonContainer}>
                 <Button title="Guardar Contacto" onPress={handleSaveContact} color="skyblue" />
             </View>
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#f5f5f5',
-        gap: 1,
-    },
-    input: {
-        width: '100%',
-        height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingHorizontal: 10,
-        marginBottom: 15,
-        backgroundColor: '#fff',
-        color: 'black',
-    },
-    image: {
-        width: 220,
-        height: 220,
-        borderRadius: 175,
-        marginBottom: 15,
-        backgroundColor: '#e0e0e0',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    buttonContainer: {
-        marginTop: 20,
-        width: '100%',
-    },
-    favoriteContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        marginVertical: 15,
-    },
-    favoriteText: {
-        fontSize: 16,
-        color: 'black',
-    },
-    pickerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 15,
-    },
-    pickerLabel: {
-        fontSize: 16,
-        color: 'black',
-        marginBottom: 5,
-        height: 20,
-    },
-    picker: {
-        width: '100%',
-        color: 'black',
-        flex: 1,
-        backgroundColor: 'white',
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        color: 'black',
-        flexDirection: 'row',
-        backgroundColor: 'white',
-        padding: 10,
-        borderRadius: 10,
-        justifyContent: 'space-around',
-        width: '80%',
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
-});
-
-//business-center
-//supervised-user-circle

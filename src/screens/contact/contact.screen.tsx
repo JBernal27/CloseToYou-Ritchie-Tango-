@@ -1,6 +1,6 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert, SafeAreaView, Image } from 'react-native';
+import { Text, TouchableOpacity, View, Alert, SafeAreaView, Image } from 'react-native';
 import { RootStackParamList } from '../../router/navigations';
 import { IContact } from '../../interfaces/contact.interface';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatPhoneNumber } from '../../utilities/format-number.utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Roles } from '../../enum/roles.enum';
+import { contactStyles } from './styles/contact.styles';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
@@ -48,17 +49,17 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={contactStyles.container}>
             {contact.image ? (
-                <Image source={{ uri: contact.image }} style={styles.image} />
+                <Image source={{ uri: contact.image }} style={contactStyles.image} />
             ) : (
-                <View style={styles.image}>
+                <View style={contactStyles.image}>
                     <Icon name="person" size={100} color={'white'} />
                 </View>
             )}
-            <View style={styles.infoContainer}>
-                <View style={styles.nameContainer}>
-                    <Text style={styles.name}>
+            <View style={contactStyles.infoContainer}>
+                <View style={contactStyles.nameContainer}>
+                    <Text style={contactStyles.name}>
                         {contact.name}
                     </Text>
                     <TouchableOpacity onPress={toggleFavorite}>
@@ -69,26 +70,26 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                         )}
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.number}>{formatPhoneNumber(contact.number)}</Text>
-                <View style={styles.role}>
-                    <Text style={styles.email}>{contact.role}</Text>
+                <Text style={contactStyles.number}>{formatPhoneNumber(contact.number)}</Text>
+                <View style={contactStyles.role}>
+                    <Text style={contactStyles.email}>{contact.role}</Text>
                     {contact.role === Roles.CLIENTE ?
                         <Icon name="business-center" color={'gray'} size={25} />
                         :
                         <Icon name="supervised-user-circle" color={'gray'} size={25} />
                     }
                 </View>
-                {contact.email && <Text style={styles.email}>{contact.email}</Text>}
+                {contact.email && <Text style={contactStyles.email}>{contact.email}</Text>}
             </View>
-            <View style={styles.buttonsContainer}>
+            <View style={contactStyles.buttonsContainer}>
                 <TouchableOpacity
-                    style={[styles.button, styles.editButton]}
+                    style={[contactStyles.button, contactStyles.editButton]}
                     onPress={() => navigate.navigate('AddContact', { contact })}
                 >
-                    <Text style={styles.buttonText}>Editar</Text>
+                    <Text style={contactStyles.buttonText}>Editar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.button, styles.deleteButton]}
+                    style={[contactStyles.button, contactStyles.deleteButton]}
                     onPress={() =>
                         Alert.alert('Confirmar Eliminación', '¿Estás seguro de que quieres eliminar este contacto?', [
                             { text: 'Cancelar', style: 'cancel' },
@@ -96,83 +97,9 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                         ])
                     }
                 >
-                    <Text style={styles.buttonText}>Eliminar</Text>
+                    <Text style={contactStyles.buttonText}>Eliminar</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#f5f5f5',
-        gap: 15,
-        marginTop: 25,
-    },
-    infoContainer: {
-        marginBottom: 20,
-        alignItems: 'center',
-    },
-    name: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    number: {
-        fontSize: 18,
-        color: '#666',
-    },
-    email: {
-        fontSize: 16,
-        color: '#888',
-    },
-    role: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 10,
-        marginVertical: 5,
-    },
-    buttonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '80%',
-    },
-    button: {
-        flex: 1,
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        marginHorizontal: 5,
-    },
-    editButton: {
-        backgroundColor: 'skyblue',
-    },
-    deleteButton: {
-        backgroundColor: 'red',
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    image: {
-        width: 250,
-        height: 250,
-        borderRadius: 175,
-        marginBottom: 15,
-        backgroundColor: '#e0e0e0',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    nameContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-});
