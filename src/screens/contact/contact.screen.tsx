@@ -8,6 +8,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatPhoneNumber } from '../../utilities/format-number.utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Roles } from '../../enum/roles.enum';
+import MapView, { Marker } from 'react-native-maps';
 import { contactStyles } from './styles/contact.styles';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
@@ -80,6 +81,21 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                     }
                 </View>
                 {contact.email && <Text style={contactStyles.email}>{contact.email}</Text>}
+            </View>
+            <View style={contactStyles.mapViewContainer}>
+                <MapView
+                    style={contactStyles.mapView}
+                    initialRegion={{
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                >
+                <Marker
+                    coordinate={{ latitude: 38.78825, longitude: -122.4324 }}
+                />
+                </MapView>
             </View>
             <View style={contactStyles.buttonsContainer}>
                 <TouchableOpacity

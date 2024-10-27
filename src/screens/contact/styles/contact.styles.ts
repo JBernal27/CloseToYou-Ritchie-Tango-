@@ -5,7 +5,8 @@ export const contactStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 20,
+    padding: 5,
+    paddingHorizontal: 15,
     backgroundColor: '#f5f5f5',
     gap: 15,
     marginTop: 25,
@@ -71,5 +72,17 @@ export const contactStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  mapView: {
+    width: '100%',
+    height: '100%',
+  },
+  mapViewContainer: {
+    overflow: 'hidden',
+    width: '100%',
+    height: 150,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 10,
   },
 });
