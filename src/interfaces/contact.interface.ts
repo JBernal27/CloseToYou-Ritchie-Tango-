@@ -1,3 +1,4 @@
+import { Region } from 'react-native-maps';
 import {Roles} from '../enum/roles.enum';
 
 export interface IContact {
@@ -8,4 +9,5 @@ export interface IContact {
   isFavorite: boolean;
   image?: string;
   role: Roles;
+  location: Region;
 }

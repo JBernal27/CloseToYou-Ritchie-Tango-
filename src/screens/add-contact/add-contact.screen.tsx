@@ -7,6 +7,7 @@ import { useAddContact } from './hooks/use-add-contact.hook';
 import { Picker } from '@react-native-picker/picker'; // Importamos Picker
 import { Roles } from '../../enum/roles.enum';
 import { addContactStyles } from './styles/add-contact.styles';
+import MapSelector from './components/map-selector.component';
 
 type AddContactProps = NativeStackScreenProps<RootStackParamList, 'AddContact'>;
 
@@ -29,6 +30,8 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
         handleSaveContact,
         role,
         setRole,
+        location,
+        setLocation,
     } = useAddContact(contact);
 
     return (
@@ -81,7 +84,6 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
                 onChangeText={setEmail}
                 keyboardType="email-address"
             />
-
             <TextInput
                 style={addContactStyles.input}
                 placeholder="Número"
@@ -116,7 +118,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
                     <Picker.Item label={Roles.CLIENTE} value={Roles.CLIENTE} />
                 </Picker>
             </View>
-
+                <MapSelector location={location} setLocation={setLocation} />
             <View style={addContactStyles.buttonContainer}>
                 <Button title="Guardar Contacto" onPress={handleSaveContact} color="skyblue" />
             </View>

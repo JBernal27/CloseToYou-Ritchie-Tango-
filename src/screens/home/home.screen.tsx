@@ -42,6 +42,7 @@ export default function Home() {
                         image={item.image}
                         role={item.role}
                         isFavorite={item.isFavorite}
+                        location={item.location}
                     />
                 )}
                 renderSectionHeader={({ section: { title } }) => (

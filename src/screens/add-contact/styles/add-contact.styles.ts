@@ -2,7 +2,6 @@ import {StyleSheet} from 'react-native';
 
 export const addContactStyles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     padding: 20,
@@ -78,5 +77,32 @@ export const addContactStyles = StyleSheet.create({
     width: '80%',
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  mapView: {
+    width: '100%',
+    height: '100%',
+  },
+  mapViewContainer: {
+    overflow: 'hidden',
+    width: '100%',
+    height: 250,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginVertical: 15,
+  },
+  infoBox: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    right: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: 10,
+    borderRadius: 5,
+  },
+  infoText: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: 'black',
   },
 });

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { IContact } from '../../../interfaces/contact.interface';
-import { ContactsService } from '../../../services/contacts.service';
+import { ContactsService } from '../../../services/contacts.service.ts';
 
 export function useHomeLogic() {
   const [contacts, setContacts] = useState<IContact[]>([]);

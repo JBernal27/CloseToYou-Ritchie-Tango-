@@ -1,6 +1,6 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View, Alert, SafeAreaView, Image } from 'react-native';
+import { Text, TouchableOpacity, View, Alert, SafeAreaView, Image, ScrollView } from 'react-native';
 import { RootStackParamList } from '../../router/navigations';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatPhoneNumber } from '../../utilities/format-number.utility';
@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Roles } from '../../enum/roles.enum';
 import MapView, { Marker } from 'react-native-maps';
 import { contactStyles } from './styles/contact.styles';
-import { ContactsService } from '../../services/contacts.service';
+import { ContactsService } from '../../services/contacts.service.ts';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
@@ -46,59 +46,65 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
 
 
     return (
-        <SafeAreaView style={contactStyles.container}>
-            {contact.image ? (
-                <Image source={{ uri: contact.image }} style={contactStyles.image} />
-            ) : (
-                <View style={contactStyles.image}>
-                    <Icon name="person" size={100} color={'white'} />
+        <ScrollView>
+            <SafeAreaView style={contactStyles.container}>
+                {contact.image ? (
+                    <Image source={{ uri: contact.image }} style={contactStyles.image} />
+                ) : (
+                    <View style={contactStyles.image}>
+                        <Icon name="person" size={100} color={'white'} />
+                    </View>
+                )}
+                <View style={contactStyles.infoContainer}>
+                    <View style={contactStyles.nameContainer}>
+                        <Text style={contactStyles.name}>
+                            {contact.name}
+                        </Text>
+                        <TouchableOpacity onPress={toggleFavorite}>
+                            {isFavorite ? (
+                                <Icon name="star" color={'#f4d03f'} size={35} />
+                            ) : (
+                                <Icon name="star-border" color={'#f4d03f'} size={35} />
+                            )}
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={contactStyles.number}>{formatPhoneNumber(contact.number)}</Text>
+                    <View style={contactStyles.role}>
+                        <Text style={contactStyles.email}>{contact.role}</Text>
+                        {contact.role === Roles.CLIENTE ?
+                            <Icon name="business-center" color={'gray'} size={25} />
+                            :
+                            <Icon name="supervised-user-circle" color={'gray'} size={25} />
+                        }
+                    </View>
+                    {contact.email && <Text style={contactStyles.email}>{contact.email}</Text>}
                 </View>
-            )}
-            <View style={contactStyles.infoContainer}>
-                <View style={contactStyles.nameContainer}>
-                    <Text style={contactStyles.name}>
-                        {contact.name}
-                    </Text>
-                    <TouchableOpacity onPress={toggleFavorite}>
-                        {isFavorite ? (
-                            <Icon name="star" color={'skyblue'} size={35} />
-                        ) : (
-                            <Icon name="star-border" color={'skyblue'} size={35} />
-                        )}
-                    </TouchableOpacity>
+                <View style={contactStyles.mapViewContainer}>
+                    <MapView
+                        style={contactStyles.mapView}
+                        initialRegion={{
+                            ...contact.location,
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
+                        liteMode
+                        showsPointsOfInterest
+                        showsUserLocation
+                        showsMyLocationButton
+                        loadingEnabled
+                    >
+                        <Marker
+                            coordinate={contact.location}
+                            pinColor="skyblue"
+                            opacity={0.7}
+                        />
+                    </MapView>
                 </View>
-                <Text style={contactStyles.number}>{formatPhoneNumber(contact.number)}</Text>
-                <View style={contactStyles.role}>
-                    <Text style={contactStyles.email}>{contact.role}</Text>
-                    {contact.role === Roles.CLIENTE ?
-                        <Icon name="business-center" color={'gray'} size={25} />
-                        :
-                        <Icon name="supervised-user-circle" color={'gray'} size={25} />
-                    }
-                </View>
-                {contact.email && <Text style={contactStyles.email}>{contact.email}</Text>}
-            </View>
-            <View style={contactStyles.mapViewContainer}>
-                <MapView
-                    style={contactStyles.mapView}
-                    initialRegion={{
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                >
-                <Marker
-                    coordinate={{ latitude: 38.78825, longitude: -122.4324 }}
-                />
-                </MapView>
-            </View>
-            <View style={contactStyles.buttonsContainer}>
                 <TouchableOpacity
                     style={[contactStyles.button, contactStyles.editButton]}
                     onPress={() => navigate.navigate('AddContact', { contact })}
                 >
-                    <Text style={contactStyles.buttonText}>Editar</Text>
+                    <Text style={contactStyles.buttonText}><Icon name="edit" size={30} color={'skyblue'}/></Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[contactStyles.button, contactStyles.deleteButton]}
@@ -109,9 +115,9 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                         ])
                     }
                 >
-                    <Text style={contactStyles.buttonText}>Eliminar</Text>
+                    <Text style={contactStyles.buttonText}><Icon name="delete" size={30} color={'#ff4545'}/></Text>
                 </TouchableOpacity>
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </ScrollView>
     );
 };

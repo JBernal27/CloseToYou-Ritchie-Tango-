@@ -2,17 +2,15 @@ import {StyleSheet} from 'react-native';
 
 export const contactStyles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'flex-start',
+    minHeight: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 5,
     paddingHorizontal: 15,
     backgroundColor: '#f5f5f5',
     gap: 15,
-    marginTop: 25,
   },
   infoContainer: {
-    marginBottom: 20,
     alignItems: 'center',
   },
   name: {
@@ -35,11 +33,6 @@ export const contactStyles = StyleSheet.create({
     gap: 10,
     marginVertical: 5,
   },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%',
-  },
   button: {
     flex: 1,
     height: 50,
@@ -49,10 +42,24 @@ export const contactStyles = StyleSheet.create({
     marginHorizontal: 5,
   },
   editButton: {
-    backgroundColor: 'skyblue',
+    borderRadius: 50,
+    width: 50,
+    height: 50,
+    borderColor: 'skyblue',
+    borderWidth: 0.5,
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
   deleteButton: {
-    backgroundColor: 'red',
+    borderRadius: 50,
+    width: 50,
+    height: 50,
+    borderColor: '#ff4545',
+    borderWidth: 0.5,
+    position: 'absolute',
+    top: 10,
+    left: 10,
   },
   buttonText: {
     color: 'white',
@@ -60,8 +67,8 @@ export const contactStyles = StyleSheet.create({
     fontSize: 16,
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 200,
+    height: 200,
     borderRadius: 175,
     marginBottom: 15,
     backgroundColor: '#e0e0e0',
@@ -80,7 +87,7 @@ export const contactStyles = StyleSheet.create({
   mapViewContainer: {
     overflow: 'hidden',
     width: '100%',
-    height: 150,
+    height: 250,
     borderColor: 'black',
     borderWidth: 1,
     borderRadius: 10,
