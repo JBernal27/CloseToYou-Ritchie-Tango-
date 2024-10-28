@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchCamera, launchImageLibrary, Asset } from 'react-native-image-picker';
 import { IContact } from '../../../interfaces/contact.interface';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../router/navigations';
 import { Roles } from '../../../enum/roles.enum';
+import { ContactsService } from '../../../services/contacts.service';
 
 export const useAddContact = (contact: Partial<IContact> = { isFavorite: false, image: '',  role: Roles.EMPLEADO }) => {
     const [name, setName] = useState(contact.name || '');
@@ -43,54 +43,52 @@ export const useAddContact = (contact: Partial<IContact> = { isFavorite: false, 
         );
     };
 
-    const handleSaveContact = async () => {
-        if (!name || !number) {
-            Alert.alert('Error', 'Por favor completa los campos requeridos.');
-            return;
-        }
+const handleSaveContact = async () => {
+    if (!name || !number) {
+        Alert.alert('Error', 'Por favor completa los campos requeridos.');
+        return;
+    }
 
-        if (number.length < 10) {
-            Alert.alert('Error', 'El número debe tener al menos 10 caracteres.');
-            return;
-        }
+    if (number.length < 10) {
+        Alert.alert('Error', 'El número debe tener al menos 10 caracteres.');
+        return;
+    }
 
-        const nuevoId = contact.id || (await generateContactId());
+    const nuevoId = contact.id || (await generateContactId());
 
-        const nuevoContacto: IContact = {
-            id: nuevoId,
-            name,
-            email,
-            number: Number(number),
-            isFavorite: isFavorite ? isFavorite : false,
-            image: imageUri,
-            role: role,
-        };
-
-        try {
-            const contactosGuardados = await AsyncStorage.getItem('contactos');
-            const contactos = contactosGuardados ? JSON.parse(contactosGuardados) : [];
-
-            const index = contactos.findIndex((c: IContact) => c.id === nuevoContacto.id);
-
-            if (index !== -1) {
-                contactos[index] = nuevoContacto;
-                Alert.alert('Éxito', `${name} ha sido actualizado correctamente.`);
-            } else {
-                contactos.push(nuevoContacto);
-                Alert.alert('Éxito', `${name} ha sido guardado correctamente.`);
-            }
-
-            await AsyncStorage.setItem('contactos', JSON.stringify(contactos));
-            navigation.navigate('Home');
-        } catch (error) {
-            console.error('Error al guardar el contacto:', error);
-            Alert.alert('Error', 'No se pudo guardar el contacto.');
-        }
+    const nuevoContacto: IContact = {
+        id: nuevoId,
+        name,
+        email,
+        number: Number(number),
+        isFavorite: isFavorite ? isFavorite : false,
+        image: imageUri,
+        role: role,
     };
 
+    try {
+        const contactos = await ContactsService.getContacts();
+
+        const index = contactos.findIndex((c: IContact) => c.id === nuevoContacto.id);
+
+        if (index !== -1) {
+            await ContactsService.updateContact(nuevoContacto.id, nuevoContacto);
+            Alert.alert('Éxito', `${name} ha sido actualizado correctamente.`);
+        } else {
+            await ContactsService.addContact(nuevoContacto);
+            Alert.alert('Éxito', `${name} ha sido guardado correctamente.`);
+        }
+
+        navigation.navigate('Home');
+    } catch (error) {
+        console.error('Error al guardar el contacto:', error);
+        Alert.alert('Error', 'No se pudo guardar el contacto.');
+    }
+};
+
+
     const generateContactId = async (): Promise<number> => {
-        const contactosGuardados = await AsyncStorage.getItem('contactos');
-        const contactos = contactosGuardados ? JSON.parse(contactosGuardados) : [];
+        const contactos = await ContactsService.getContacts();
         const maxId = contactos.reduce((max: number, contacto: IContact) => Math.max(max, contacto.id), 0);
         return maxId + 1;
     };

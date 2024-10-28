@@ -2,14 +2,13 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View, Alert, SafeAreaView, Image } from 'react-native';
 import { RootStackParamList } from '../../router/navigations';
-import { IContact } from '../../interfaces/contact.interface';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatPhoneNumber } from '../../utilities/format-number.utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Roles } from '../../enum/roles.enum';
 import MapView, { Marker } from 'react-native-maps';
 import { contactStyles } from './styles/contact.styles';
+import { ContactsService } from '../../services/contacts.service';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
@@ -20,15 +19,12 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
 
     const toggleFavorite = async () => {
         try {
-            const savedContacts = await AsyncStorage.getItem('contactos');
-            if (savedContacts) {
-                const parsedContacts = JSON.parse(savedContacts) as IContact[];
-                const updatedContacts = parsedContacts.map(c =>
-                    c.id === contact.id ? { ...c, isFavorite: !c.isFavorite } : c
-                );
-
-                await AsyncStorage.setItem('contactos', JSON.stringify(updatedContacts));
-                setIsFavorite(!isFavorite); // Actualiza el estado para reflejar el cambio
+            const contactos = await ContactsService.getContacts();
+            const contacto = contactos.find(c => c.id === contact.id);
+            if (contacto) {
+                const updatedContact = { ...contacto, isFavorite: !contacto.isFavorite };
+                await ContactsService.updateContact(contact.id, updatedContact);
+                setIsFavorite(!isFavorite); // Actualiza el estado local
             }
         } catch (error) {
             console.error('Error al cambiar favorito:', error);
@@ -37,17 +33,17 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
 
     const onDelete = async (contactNumber: number) => {
         try {
-            const savedContacts = await AsyncStorage.getItem('contactos');
-            if (savedContacts) {
-                const parsedContacts = JSON.parse(savedContacts) as IContact[];
-                const updatedContacts = parsedContacts.filter(contacto => contacto.number !== contactNumber);
-                await AsyncStorage.setItem('contactos', JSON.stringify(updatedContacts));
+            const contactos = await ContactsService.getContacts();
+            const contacto = contactos.find(c => c.number === contactNumber);
+            if (contacto) {
+                await ContactsService.deleteContact(contacto.id);
                 navigate.navigate('Home');
             }
         } catch (error) {
             console.error('Error al eliminar el contacto:', error);
         }
     };
+
 
     return (
         <SafeAreaView style={contactStyles.container}>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IContact } from '../../../interfaces/contact.interface';
+import { ContactsService } from '../../../services/contacts.service';
 
 export function useHomeLogic() {
   const [contacts, setContacts] = useState<IContact[]>([]);
@@ -11,11 +11,10 @@ export function useHomeLogic() {
 
   const getContacts = async () => {
     try {
-      const savedContacts = await AsyncStorage.getItem('contactos');
+      const savedContacts = await ContactsService.getContacts();
       if (savedContacts) {
-        const parsedContacts = JSON.parse(savedContacts);
-        setContacts(parsedContacts);
-        setFilteredContacts(parsedContacts);
+        setContacts(savedContacts);
+        setFilteredContacts(savedContacts);
       }
     } catch (error) {
       console.error('Error al cargar los contactos:', error);
