@@ -1,4 +1,5 @@
-import {StyleSheet} from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import {StyleSheet, Animated} from 'react-native';
 
 export const contactStyles = StyleSheet.create({
   container: {
@@ -89,7 +90,64 @@ export const contactStyles = StyleSheet.create({
     width: '100%',
     height: 250,
     borderColor: 'black',
-    borderWidth: 1,
     borderRadius: 10,
+    elevation: 8,
+    marginBottom: 40,
+  },
+  markerContainer: {
+    borderColor: 'red',
+    borderWidth: 3,
+    width: 45,
+    height: 45,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  markerImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+  },
+  marker: {
+    width: 20,
+    height: 20,
+    borderRadius: 25,
+    backgroundColor: 'red',
   },
 });
+
+const PulsingMarker = () => {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const pulse = () => {
+      Animated.sequence([
+        Animated.timing(scaleAnim, {
+          toValue: 1.5,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ]).start(() => pulse());
+    };
+
+    pulse();
+  }, [scaleAnim]);
+
+  return (
+    <Animated.View
+      style={[
+        contactStyles.marker,
+        {
+          transform: [{ scale: scaleAnim }],
+        },
+      ]}
+    />
+  );
+};
+
+export default PulsingMarker;

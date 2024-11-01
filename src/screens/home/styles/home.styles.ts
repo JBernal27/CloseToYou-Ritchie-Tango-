@@ -28,12 +28,12 @@ export const homeStyles = StyleSheet.create({
         marginVertical: 10,
     },
     sectionHeader: {
-        backgroundColor: '#fff',
         padding: 5,
         paddingHorizontal: 20,
         fontWeight: 'bold',
         fontSize: 26,
         color: 'black',
+        backgroundColor: '#f5f5f5',
     },
     emptyMessage: {
         textAlign: 'center',

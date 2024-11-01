@@ -19,8 +19,20 @@ export const Navigation: React.FC = () => {
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Home">
                 <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-                <Stack.Screen name="AddContact" component={AddContact} options={{ title: 'Modificar Contacto' }} />
-                <Stack.Screen name="ContactDetail" component={ContactDetail} options={{ title: 'Contacto' }} />
+                <Stack.Screen
+                    name="AddContact"
+                    component={AddContact}
+                    options={({ route }) => ({
+                        title: route.params ? 'Editando a ' +  route.params.contact.name : 'Añadir Contacto',
+                    })}
+                />
+                <Stack.Screen
+                    name="ContactDetail"
+                    component={ContactDetail}
+                    options={({ route }) => ({
+                        title: route.params.contact.name,
+                    })}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

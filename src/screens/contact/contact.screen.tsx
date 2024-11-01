@@ -7,8 +7,9 @@ import { formatPhoneNumber } from '../../utilities/format-number.utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Roles } from '../../enum/roles.enum';
 import MapView, { Marker } from 'react-native-maps';
-import { contactStyles } from './styles/contact.styles';
+import PulsingMarker, { contactStyles } from './styles/contact.styles';
 import { ContactsService } from '../../services/contacts.service.ts';
+import WeatherHorizontal from './components/weather.component.tsx';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
@@ -79,6 +80,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                     </View>
                     {contact.email && <Text style={contactStyles.email}>{contact.email}</Text>}
                 </View>
+                <WeatherHorizontal longitude={contact.location.longitude} latitude={contact.location.latitude} />
                 <View style={contactStyles.mapViewContainer}>
                     <MapView
                         style={contactStyles.mapView}
@@ -87,24 +89,40 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                             latitudeDelta: 0.01,
                             longitudeDelta: 0.01,
                         }}
-                        liteMode
                         showsPointsOfInterest
                         showsUserLocation
                         showsMyLocationButton
                         loadingEnabled
+                        zoomControlEnabled
                     >
                         <Marker
+                            title={contact.name}
+                            description={`Celular: ${formatPhoneNumber(contact.number)}`}
                             coordinate={contact.location}
                             pinColor="skyblue"
-                            opacity={0.7}
-                        />
+                            opacity={1}
+                            anchor={{ x: 0.5, y: 0.5 }}
+                        >
+                            <View style={contactStyles.markerContainer}>
+                                {
+                                    contact.image ?
+                                        <Image
+                                            source={{ uri: contact.image }}
+                                            style={contactStyles.markerImage}
+                                        />
+                                        :
+                                        // <View style={contactStyles.marker} />
+                                        <PulsingMarker />
+                                }
+                            </View>
+                        </Marker>
                     </MapView>
                 </View>
                 <TouchableOpacity
                     style={[contactStyles.button, contactStyles.editButton]}
                     onPress={() => navigate.navigate('AddContact', { contact })}
                 >
-                    <Text style={contactStyles.buttonText}><Icon name="edit" size={30} color={'skyblue'}/></Text>
+                    <Text style={contactStyles.buttonText}><Icon name="edit" size={30} color={'skyblue'} /></Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[contactStyles.button, contactStyles.deleteButton]}
@@ -115,7 +133,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                         ])
                     }
                 >
-                    <Text style={contactStyles.buttonText}><Icon name="delete" size={30} color={'#ff4545'}/></Text>
+                    <Text style={contactStyles.buttonText}><Icon name="delete" size={30} color={'#ff4545'} /></Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </ScrollView>
