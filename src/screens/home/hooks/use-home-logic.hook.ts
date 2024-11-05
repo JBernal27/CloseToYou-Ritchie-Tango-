@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useIsFocused } from '@react-navigation/native';
-import { IContact } from '../../../interfaces/contact.interface';
-import { ContactsService } from '../../../services/contacts.service.ts';
-import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
-import { Alert } from 'react-native';
+import {useState, useEffect, useMemo} from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import {IContact} from '../../../interfaces/contact.interface';
+import {ContactsService} from '../../../services/contacts.service.ts';
+import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {Alert} from 'react-native';
 
 export function useHomeLogic() {
   const [contacts, setContacts] = useState<IContact[]>([]);
@@ -13,46 +13,51 @@ export function useHomeLogic() {
 
   const requestLocationPermission = async () => {
     try {
-      const result = await request( PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
 
       if (result !== RESULTS.GRANTED) {
-        Alert.alert('Permiso denegado', 'Necesitas conceder permisos desde la configuracion para acceder a la ubicación.');
+        Alert.alert(
+          'Permiso denegado',
+          'Necesitas conceder permisos desde la configuracion para acceder a la ubicación.',
+        );
       }
     } catch (error) {
       console.warn('Error al solicitar permiso:', error);
     }
   };
 
-// const requestCameraPermission = async () => {
-//   try {
-//     const result = await request(PERMISSIONS.ANDROID.CAMERA);
+  // const requestCameraPermission = async () => {
+  //   try {
+  //     const result = await request(PERMISSIONS.ANDROID.CAMERA);
 
-//     if (result !== RESULTS.GRANTED) {
-//       Alert.alert('Permiso denegado', result);
-//     }
-//   } catch (error) {
-//     console.warn('Error al solicitar permiso de cámara:', error);
-//   }
-// };
+  //     if (result !== RESULTS.GRANTED) {
+  //       Alert.alert('Permiso denegado', result);
+  //     }
+  //   } catch (error) {
+  //     console.warn('Error al solicitar permiso de cámara:', error);
+  //   }
+  // };
 
-const requestGalleryPermission = async () => {
-  try {
-    const result = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+  const requestGalleryPermission = async () => {
+    try {
+      const result = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
 
-    if (result !== RESULTS.GRANTED) {
-      Alert.alert('Permiso denegado', 'No tienes acceso a la galería');
+      if (result !== RESULTS.GRANTED) {
+        Alert.alert('Permiso denegado', 'No tienes acceso a la galería');
+      }
+    } catch (error) {
+      console.warn('Error al solicitar permiso de galería:', error);
     }
-  } catch (error) {
-    console.warn('Error al solicitar permiso de galería:', error);
-  }
-};
+  };
 
+  const requestPermissions = async () => {
+    await requestLocationPermission();
+    await requestGalleryPermission();
+  };
 
   useEffect(() => {
-    requestLocationPermission();
-    requestGalleryPermission();
-    // requestCameraPermission();
-  },[]);
+    requestPermissions();
+  });
 
   const getContacts = async () => {
     try {
@@ -79,7 +84,7 @@ const requestGalleryPermission = async () => {
 
   const sections = useMemo(() => {
     const favorites = filteredContacts.filter(contact => contact.isFavorite);
-    const groupedByLetter: { [key: string]: IContact[] } = {};
+    const groupedByLetter: {[key: string]: IContact[]} = {};
 
     filteredContacts.forEach(contact => {
       const firstLetter = contact.name[0].toUpperCase();
@@ -96,10 +101,7 @@ const requestGalleryPermission = async () => {
         data: groupedByLetter[letter],
       }));
 
-    return [
-      { title: 'Favoritos', data: favorites },
-      ...letterSections,
-    ];
+    return [{title: 'Favoritos', data: favorites}, ...letterSections];
   }, [filteredContacts]);
 
   useEffect(() => {

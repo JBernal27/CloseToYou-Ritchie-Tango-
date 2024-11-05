@@ -9,7 +9,7 @@ import { Roles } from '../../enum/roles.enum';
 import MapView, { Marker } from 'react-native-maps';
 import PulsingMarker, { contactStyles } from './styles/contact.styles';
 import { ContactsService } from '../../services/contacts.service.ts';
-import WeatherHorizontal from './components/weather.component.tsx';
+import { WeatherComponent } from './components/weather.component.tsx';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
@@ -32,7 +32,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
         }
     };
 
-    const onDelete = async (contactNumber: number) => {
+    const onDelete = async (contactNumber: string) => {
         try {
             const contactos = await ContactsService.getContacts();
             const contacto = contactos.find(c => c.number === contactNumber);
@@ -80,7 +80,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                     </View>
                     {contact.email && <Text style={contactStyles.email}>{contact.email}</Text>}
                 </View>
-                <WeatherHorizontal longitude={contact.location.longitude} latitude={contact.location.latitude} />
+                <WeatherComponent longitude={contact.location.longitude} latitude={contact.location.latitude} />
                 <View style={contactStyles.mapViewContainer}>
                     <MapView
                         style={contactStyles.mapView}
@@ -89,7 +89,6 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                             latitudeDelta: 0.01,
                             longitudeDelta: 0.01,
                         }}
-                        showsPointsOfInterest
                         showsUserLocation
                         showsMyLocationButton
                         loadingEnabled

@@ -4,7 +4,7 @@ import { getWeatherData } from '../../../services/weather.service';
 import { LatLng } from 'react-native-maps';
 import { IWeatherData } from '../../../interfaces/weather.interface';
 
-const WeatherAtNoon = (location: LatLng) => {
+export const WeatherComponent = (location: LatLng) => {
   const [weatherData, setWeatherData] = useState<IWeatherData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -119,6 +119,4 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
-
-export default WeatherAtNoon;
 

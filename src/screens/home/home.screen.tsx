@@ -30,6 +30,7 @@ export default function Home() {
                 </TouchableOpacity>
             </View>
             <SectionList
+                testID="section-list"
                 style={{height: height - 90}}
                 sections={sections}
                 keyExtractor={(item, index) => item.id.toString() + index}

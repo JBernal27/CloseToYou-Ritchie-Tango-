@@ -10,6 +10,7 @@ import {
 } from 'react-native-image-picker';
 import {Alert} from 'react-native';
 import {ContactsService} from '../../../services/contacts.service';
+import { useState } from 'react';
 
 export const useAddContact = (
   contact: Partial<IContact> = {
@@ -18,6 +19,7 @@ export const useAddContact = (
     role: Roles.EMPLEADO,
   },
 ) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     control,
     handleSubmit,
@@ -150,5 +152,7 @@ export const useAddContact = (
     getValues,
     setValue,
     errors,
+    isModalOpen,
+    setIsModalOpen,
   };
 };

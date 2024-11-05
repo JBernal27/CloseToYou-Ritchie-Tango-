@@ -25,11 +25,13 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
     getValues,
     setValue,
     errors,
+    isModalOpen,
+    setIsModalOpen,
   } = useAddContact(contact);
 
   return (
     <ScrollView contentContainerStyle={addContactStyles.container}>
-      <TouchableOpacity onPress={handleImageSelection}>
+      <TouchableOpacity onPress={() => setIsModalOpen(true)}>
         {imageUri ? (
           <Image source={{ uri: imageUri }} style={addContactStyles.image} />
         ) : (
@@ -41,7 +43,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
 
       <Modal
         transparent
-        visible={false}
+        visible={isModalOpen}
         animationType="fade"
         onRequestClose={() => {}}
       >
@@ -55,7 +57,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
               <TouchableOpacity onPress={handleLaunchCamera}>
                 <Icon name="add-a-photo" size={50} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => setIsModalOpen(false)}>
                 <Icon name="close" size={50} color="black" />
               </TouchableOpacity>
             </View>
@@ -137,7 +139,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
           </View>
         )}
       />
-
+{/* 
       <View style={addContactStyles.pickerContainer}>
         <Text style={addContactStyles.pickerLabel}>Selecciona un rol:</Text>
         <Controller
@@ -155,7 +157,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
             </Picker>
           )}
         />
-      </View>
+      </View> */}
 
       <MapSelector location={getValues('location')} setLocation={(loc) => setValue('location', loc as Region)} />
       <View style={addContactStyles.buttonContainer}>

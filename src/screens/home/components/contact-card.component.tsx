@@ -70,9 +70,9 @@ export default function ContactCard(contact: IContact) {
             </View>
             <View style={styles.iconBox}>
                 {contact.role === Roles.CLIENTE ?
-                <Icon name="business-center" color={'gray'} size={25}/>
+                <Icon name="business-center" color={'gray'} size={25} testID="icon"/>
                 :
-                <Icon name="supervised-user-circle" color={'gray'} size={25}/>
+                <Icon name="supervised-user-circle" color={'gray'} size={25} testID="icon"/>
                 }
             </View>
         </TouchableOpacity>
