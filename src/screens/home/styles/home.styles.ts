@@ -41,4 +41,7 @@ export const homeStyles = StyleSheet.create({
         fontSize: 18,
         color: 'gray',
     },
+    sectionList: {
+        height: '90%',
+    },
 });

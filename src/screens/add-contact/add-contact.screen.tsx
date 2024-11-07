@@ -3,13 +3,12 @@ import { View, TextInput, Button, ScrollView, Switch, Text, Image, TouchableOpac
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAddContact } from './hooks/use-add-contact.hook';
-import { Picker } from '@react-native-picker/picker';
+import { Dropdown } from 'react-native-element-dropdown';
 import { Roles } from '../../enum/roles.enum';
 import { addContactStyles } from './styles/add-contact.styles';
 import MapSelector from './components/map-selector.component';
 import { Controller } from 'react-hook-form';
 import { RootStackParamList } from '../../router/navigations';
-import { Region } from 'react-native-maps';
 
 type AddContactProps = NativeStackScreenProps<RootStackParamList, 'AddContact'>;
 
@@ -21,19 +20,21 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
     handleImageSelection,
     handleLaunchCamera,
     handleSaveContact,
-    imageUri,
-    getValues,
-    setValue,
     errors,
     isModalOpen,
     setIsModalOpen,
+    location,
+    setLocation,
+    image,
   } = useAddContact(contact);
+
+  console.log(image);
 
   return (
     <ScrollView contentContainerStyle={addContactStyles.container}>
       <TouchableOpacity onPress={() => setIsModalOpen(true)}>
-        {imageUri ? (
-          <Image source={{ uri: imageUri }} style={addContactStyles.image} />
+        {image ? (
+          <Image source={{ uri: image }} style={addContactStyles.image} />
         ) : (
           <View style={[addContactStyles.image]}>
             <Icon name="add-a-photo" size={100} color={'white'} />
@@ -45,7 +46,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
         transparent
         visible={isModalOpen}
         animationType="fade"
-        onRequestClose={() => {}}
+        onRequestClose={() => { }}
       >
         <View style={addContactStyles.modalContainer}>
           <View style={addContactStyles.modalContent}>
@@ -106,7 +107,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
         control={control}
         name="number"
         render={({ field: { onChange, onBlur, value } }) => (
-        <View style={addContactStyles.inputCointainer}>
+          <View style={addContactStyles.inputCointainer}>
             {errors.number && <Text style={addContactStyles.errorText}>{errors.number.message}</Text>}
             <TextInput
               style={addContactStyles.input}
@@ -118,7 +119,7 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
                 onChange(filteredText);
               }}
               value={value}
-              keyboardType="phone-pad"
+              keyboardType="numeric"
             />
           </View>
         )}
@@ -139,27 +140,32 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
           </View>
         )}
       />
-{/* 
+
       <View style={addContactStyles.pickerContainer}>
         <Text style={addContactStyles.pickerLabel}>Selecciona un rol:</Text>
         <Controller
           control={control}
           name="role"
           render={({ field: { onChange, value } }) => (
-            <Picker
-              selectedValue={value}
-              onValueChange={onChange}
-              style={addContactStyles.picker}
-              dropdownIconColor={'black'}
-            >
-              <Picker.Item label={Roles.EMPLEADO} value={Roles.EMPLEADO} />
-              <Picker.Item label={Roles.CLIENTE} value={Roles.CLIENTE} />
-            </Picker>
+            <Dropdown
+              style={addContactStyles.dropdown}
+              placeholderStyle={addContactStyles.placeholderStyle}
+              selectedTextStyle={addContactStyles.selectedTextStyle}
+              itemTextStyle={addContactStyles.selectedTextStyle}
+              data={[
+                { label: Roles.EMPLEADO, value: Roles.EMPLEADO },
+                { label: Roles.CLIENTE, value: Roles.CLIENTE },
+              ]}
+              labelField="label"
+              valueField="value"
+              value={value}
+              onChange={item => onChange(item.value)}
+            />
           )}
         />
-      </View> */}
+      </View>
 
-      <MapSelector location={getValues('location')} setLocation={(loc) => setValue('location', loc as Region)} />
+      <MapSelector location={location} setLocation={setLocation} />
       <View style={addContactStyles.buttonContainer}>
         <Button title="Guardar Contacto" onPress={handleSubmit(handleSaveContact)} color="skyblue" />
       </View>

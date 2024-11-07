@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionList, TextInput, TouchableOpacity, View, Text, Dimensions } from 'react-native';
+import { SectionList, TextInput, TouchableOpacity, View, Text} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -7,8 +7,7 @@ import ContactCard from './components/contact-card.component';
 import { RootStackParamList } from '../../router/navigations';
 import { useHomeLogic } from './hooks/use-home-logic.hook';
 import { homeStyles } from './styles/home.styles';
-
-const { height } = Dimensions.get('window');
+import { BottomNavBar } from './components/navbar.component';
 
 
 export default function Home() {
@@ -31,7 +30,7 @@ export default function Home() {
             </View>
             <SectionList
                 testID="section-list"
-                style={{height: height - 90}}
+                style={homeStyles.sectionList}
                 sections={sections}
                 keyExtractor={(item, index) => item.id.toString() + index}
                 renderItem={({ item }) => (
@@ -54,6 +53,8 @@ export default function Home() {
                     <Text style={homeStyles.emptyMessage}>No se encontraron contactos</Text>
                 }
             />
+            <BottomNavBar/>
+            <Text> asd</Text>
         </SafeAreaView>
     );
 }

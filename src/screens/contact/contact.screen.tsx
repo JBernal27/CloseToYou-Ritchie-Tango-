@@ -7,9 +7,10 @@ import { formatPhoneNumber } from '../../utilities/format-number.utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Roles } from '../../enum/roles.enum';
 import MapView, { Marker } from 'react-native-maps';
-import PulsingMarker, { contactStyles } from './styles/contact.styles';
+import { contactStyles } from './styles/contact.styles';
 import { ContactsService } from '../../services/contacts.service.ts';
 import { WeatherComponent } from './components/weather.component.tsx';
+import DefaultMarker from './styles/contact.styles';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
@@ -110,8 +111,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                                             style={contactStyles.markerImage}
                                         />
                                         :
-                                        // <View style={contactStyles.marker} />
-                                        <PulsingMarker />
+                                        <DefaultMarker name={contact.name} />
                                 }
                             </View>
                         </Marker>

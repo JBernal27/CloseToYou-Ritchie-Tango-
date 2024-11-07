@@ -122,4 +122,22 @@ export const addContactStyles = StyleSheet.create({
   inputCointainer: {
     width: '100%',
   },
+  dropdown: {
+    margin: 16,
+    height: 50,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 10,
+    flex: 1,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color: 'black',
+  },
 });

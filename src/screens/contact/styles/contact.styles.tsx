@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import {StyleSheet, Animated} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export const contactStyles = StyleSheet.create({
   container: {
@@ -116,38 +116,42 @@ export const contactStyles = StyleSheet.create({
   },
 });
 
-const PulsingMarker = () => {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+const generarColorAleatorio = () => {
+  const numeroAleatorio = Math.floor(Math.random() * 16777215);
+  return `#${numeroAleatorio.toString(16).padStart(6, '0')}`;
+};
 
-  useEffect(() => {
-    const pulse = () => {
-      Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 1.5,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-      ]).start(() => pulse());
-    };
+const DefaultMarker = ({ name }: { name: string }) => {
+  const colorDeFondo = generarColorAleatorio();
 
-    pulse();
-  }, [scaleAnim]);
+  const iniciales =
+    name
+      ?.split(' ')
+      .slice(0, 2)
+      .map((nombre: string) => nombre.charAt(0).toUpperCase())
+      .join('') || '';
 
   return (
-    <Animated.View
-      style={[
-        contactStyles.marker,
-        {
-          transform: [{ scale: scaleAnim }],
-        },
-      ]}
-    />
+    <View style={[styles.marker, { backgroundColor: colorDeFondo }]}>
+      <Text style={styles.iniciales}>{iniciales}</Text>
+    </View>
   );
 };
 
-export default PulsingMarker;
+const styles = StyleSheet.create({
+  marker: {
+    width: 25,
+    height: 25,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iniciales: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+});
+
+export default DefaultMarker;
+

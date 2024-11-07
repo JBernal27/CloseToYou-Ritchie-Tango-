@@ -15,19 +15,15 @@
       longitudeDelta: location.longitudeDelta || 0.01,
     };
 
-    const [currentLocation, setCurrentLocation] = React.useState<Region>(initialRegion);
-
     const handleMapPress = (event: MapPressEvent): void => {
       const { latitude, longitude } = event.nativeEvent.coordinate;
 
-      setCurrentLocation({
+      setLocation({
         latitude,
         longitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       });
-
-      setLocation(currentLocation);
     };
 
     return (
@@ -43,7 +39,7 @@
         >
           {location && (
             <Marker
-              coordinate={currentLocation}
+              coordinate={location}
               pinColor="skyblue"
               opacity={0.7}
               title="Punto Seleccionado"

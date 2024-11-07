@@ -10,7 +10,8 @@ import {
 } from 'react-native-image-picker';
 import {Alert} from 'react-native';
 import {ContactsService} from '../../../services/contacts.service';
-import { useState } from 'react';
+import {useState} from 'react';
+import {Region} from 'react-native-maps';
 
 export const useAddContact = (
   contact: Partial<IContact> = {
@@ -20,12 +21,18 @@ export const useAddContact = (
   },
 ) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [location, setLocation] = useState<Region>(
+    contact.location || {
+      latitude: 6.218972,
+      longitude: -75.583639,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    },
+  );
+  const [image, setImage] = useState<string>(contact.image || '');
   const {
     control,
     handleSubmit,
-    setValue,
-    watch,
-    getValues,
     register,
     formState: {errors},
   } = useForm<IContact>({
@@ -45,7 +52,6 @@ export const useAddContact = (
     },
   });
 
-  const imageUri = watch('image');
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleImageResponse = (response: {
@@ -59,7 +65,7 @@ export const useAddContact = (
       Alert.alert('Error', response.errorMessage);
     } else if (response.assets && response.assets.length > 0) {
       const {uri} = response.assets[0];
-      setValue('image', uri ? uri : '');
+      setImage(uri ? uri : '');
     }
   };
 
@@ -78,6 +84,8 @@ export const useAddContact = (
   };
 
   const handleSaveContact: SubmitHandler<IContact> = async data => {
+    console.log(data);
+
     if (!data.name || !data.number) {
       Alert.alert('Error', 'Por favor completa los campos requeridos.');
       return;
@@ -91,9 +99,9 @@ export const useAddContact = (
       email: data.email,
       number: data.number,
       isFavorite: data.isFavorite,
-      image: data.image,
+      image: image,
       role: data.role,
-      location: data.location,
+      location: location,
     };
 
     try {
@@ -148,11 +156,12 @@ export const useAddContact = (
     handleImageSelection,
     handleLaunchCamera,
     handleSaveContact,
-    imageUri,
-    getValues,
-    setValue,
     errors,
     isModalOpen,
     setIsModalOpen,
+    location,
+    setLocation,
+    image,
+    setImage,
   };
 };
