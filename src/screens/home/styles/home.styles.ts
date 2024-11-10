@@ -42,6 +42,7 @@ export const homeStyles = StyleSheet.create({
         color: 'gray',
     },
     sectionList: {
-        height: '90%',
+        height: '85%',
+        marginBottom: '10%',
     },
 });

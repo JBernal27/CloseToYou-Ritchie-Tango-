@@ -1,4 +1,4 @@
-package com.contactsapp
+package com.closetoyou.tango.bernal.www
 
 import android.app.Application
 import com.facebook.react.PackageList

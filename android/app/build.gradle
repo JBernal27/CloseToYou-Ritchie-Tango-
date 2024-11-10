@@ -81,9 +81,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.contactsapp"
+    namespace "com.closetoyou.tango.bernal.www"
     defaultConfig {
-        applicationId "com.contactsapp"
+        applicationId "com.closetoyou.tango.bernal.www"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

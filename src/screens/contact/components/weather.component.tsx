@@ -8,6 +8,8 @@ export const WeatherComponent = (location: LatLng) => {
   const [weatherData, setWeatherData] = useState<IWeatherData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  console.log('lece');
+
   useEffect(() => {
     const fetchData = async () => {
       try {

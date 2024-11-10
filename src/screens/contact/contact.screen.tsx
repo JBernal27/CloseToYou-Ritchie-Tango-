@@ -19,6 +19,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
     const navigate = useNavigation<NavigationProp<RootStackParamList>>();
     const [isFavorite, setIsFavorite] = useState(contact.isFavorite);
 
+    console.log('contact');
     const toggleFavorite = async () => {
         try {
             const contactos = await ContactsService.getContacts();
