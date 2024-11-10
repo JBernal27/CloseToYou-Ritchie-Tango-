@@ -26,8 +26,8 @@ export const contactsMapStyles = StyleSheet.create({
         borderWidth: 2,
     },
     markerImage: {
-        width: 40,
-        height: 40,
+        width: 25,
+        height: 25,
         borderRadius: 20,
     },
     markerText: {

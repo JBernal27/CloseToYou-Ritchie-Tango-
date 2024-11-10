@@ -11,7 +11,7 @@ function App(): React.JSX.Element {
   // borrar();
 
   return (
-    <Navigation />
+    <Navigation/>
   );
 }
 

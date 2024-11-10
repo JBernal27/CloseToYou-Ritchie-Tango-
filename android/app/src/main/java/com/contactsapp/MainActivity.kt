@@ -1,4 +1,4 @@
-package com.contactsapp
+package com.closetoyou.tango.bernal.www
 import android.os.Bundle;
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
