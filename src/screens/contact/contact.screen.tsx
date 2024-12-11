@@ -1,6 +1,6 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View, Alert, SafeAreaView, Image, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, View, Alert, SafeAreaView, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { RootStackParamList } from '../../router/navigations';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatPhoneNumber } from '../../utilities/format-number.utility';
@@ -11,6 +11,7 @@ import { contactStyles } from './styles/contact.styles';
 import { ContactsService } from '../../services/contacts.service.ts';
 import { WeatherComponent } from './components/weather.component.tsx';
 import DefaultMarker from './styles/contact.styles';
+import Loader from '../../utilities/loader.utility.tsx';
 
 type ContactDetailProps = NativeStackScreenProps<RootStackParamList, 'ContactDetail'>;
 
@@ -18,24 +19,43 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
     const { contact } = route.params;
     const navigate = useNavigation<NavigationProp<RootStackParamList>>();
     const [isFavorite, setIsFavorite] = useState(contact.isFavorite);
+    const [isLoading, setIsLoading] = useState(false);
 
-    console.log('contact');
     const toggleFavorite = async () => {
         try {
+            setIsLoading(true);
             const contactos = await ContactsService.getContacts();
             const contacto = contactos.find(c => c.id === contact.id);
             if (contacto) {
-                const updatedContact = { ...contacto, isFavorite: !contacto.isFavorite };
-                await ContactsService.updateContact(contact.id, updatedContact);
-                setIsFavorite(!isFavorite); // Actualiza el estado local
+                const updatedContactObject = { ...contacto, isFavorite: !contacto.isFavorite };
+                const updatedContact = new FormData();
+                updatedContact.append('name', contacto.name);
+                updatedContact.append('number', contacto.number);
+                updatedContact.append('email', contacto.email || '');
+                updatedContact.append('role', contacto.role);
+                updatedContact.append('isFavorite', `${!contacto.isFavorite}`);
+
+                if (contacto.image) {
+                    updatedContact.append('image', {
+                        uri: contacto.image,
+                        type: 'image/jpeg',
+                        name: 'contact-image.jpg',
+                    });
+                }
+
+                await ContactsService.updateContact(contact.id, updatedContact, updatedContactObject);
+                setIsFavorite(!isFavorite);
             }
         } catch (error) {
             console.error('Error al cambiar favorito:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const onDelete = async (contactNumber: string) => {
         try {
+            setIsLoading(true);
             const contactos = await ContactsService.getContacts();
             const contacto = contactos.find(c => c.number === contactNumber);
             if (contacto) {
@@ -44,9 +64,10 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
             }
         } catch (error) {
             console.error('Error al eliminar el contacto:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
-
 
     return (
         <ScrollView>
@@ -74,7 +95,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                     <Text style={contactStyles.number}>{formatPhoneNumber(contact.number)}</Text>
                     <View style={contactStyles.role}>
                         <Text style={contactStyles.email}>{contact.role}</Text>
-                        {contact.role === Roles.CLIENTE ?
+                        {contact.role === Roles.CLIENTE ? 
                             <Icon name="business-center" color={'gray'} size={25} />
                             :
                             <Icon name="supervised-user-circle" color={'gray'} size={25} />
@@ -135,6 +156,9 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({ route }) => {
                 >
                     <Text style={contactStyles.buttonText}><Icon name="delete" size={30} color={'#ff4545'} /></Text>
                 </TouchableOpacity>
+                {isLoading && (
+                    <Loader />
+                )}
             </SafeAreaView>
         </ScrollView>
     );

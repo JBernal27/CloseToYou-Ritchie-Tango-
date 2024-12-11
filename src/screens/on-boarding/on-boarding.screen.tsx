@@ -1,9 +1,9 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
 import { RootStackParamList } from '../../router/navigations';
-import { SettingsService } from '../../services/settings.service'; // Importar el servicio
+import { GlobalContext } from '../../utilities/global.context';
 
 const styles = {
     image: {
@@ -14,11 +14,18 @@ const styles = {
 
 const OnboardingScreen = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const context = useContext(GlobalContext!);
 
-    const finishOnboarding = async () => {
+    const finishOnboarding = () => {
         try {
-            await SettingsService.updateSetting('isFirstTime', false);
-            navigation.navigate('Home');
+            if (context && context.settings) {
+                context?.setSettings({ ...context?.settings, isFirstTime: false });
+                navigation.navigate('Home');
+            }
+            else {
+                context?.setSettings({ isFirstTime: false });
+                navigation.navigate('Home');
+            }
         } catch (error) {
             console.error('Error al finalizar onboarding:', error);
         }
@@ -60,7 +67,7 @@ const OnboardingScreen = () => {
                 {
                     backgroundColor: '#fff',
                     image: <Image style={styles.image} source={require('../../assets/start-to-use.png')} />,
-                    title: 'Comienza a Usar',
+                    title: 'Comienza a Usarla',
                     subtitle: '¡Listo para empezar a disfrutar de la aplicación!',
                 },
             ]}

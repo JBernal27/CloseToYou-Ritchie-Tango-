@@ -1,7 +1,8 @@
-export interface ISettings {
-    name: string;
-    email: string;
-    phone: string;
-    isFirstTime: boolean;
-    location: string;
+import {IUser} from './user.interface';
+
+export interface ISettings extends IUser {
+  id: number;
+  isFirstTime: boolean;
+  token: string;
+  wantsBackup: boolean;
 }

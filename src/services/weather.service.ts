@@ -1,12 +1,11 @@
-import axios from 'axios';
-import { IWeatherData } from '../interfaces/weather.interface';
-import { WEATHER_API_KEY } from '@env';
+// import axios from 'axios';
+import {IWeatherData} from '../interfaces/weather.interface';
+import {WEATHER_API_KEY} from '@env';
+import {WeatherAxiosInstance} from '../../axios.config';
 
-const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
-
-export const getWeatherData = async (lat: number, lon:number) => {
+export const getWeatherData = async (lat: number, lon: number) => {
   try {
-    const response = await axios.get(BASE_URL, {
+    const response = await WeatherAxiosInstance.get('', {
       params: {
         lat: lat,
         lon: lon,
@@ -23,18 +22,18 @@ export const getWeatherData = async (lat: number, lon:number) => {
   }
 };
 
-// axios.interceptors.request.use((request) => {
+// WeatherAxiosInstance.interceptors.request.use(request => {
 //   console.log('Starting Request', request);
 //   return request;
 // });
 
-// axios.interceptors.response.use(
-//   (response) => {
+// WeatherAxiosInstance.interceptors.response.use(
+//   response => {
 //     console.log('Response:', response);
 //     return response;
 //   },
-//   (error) => {
+//   error => {
 //     console.error('Error Response:', error);
 //     return Promise.reject(error);
-//   }
+//   },
 // );

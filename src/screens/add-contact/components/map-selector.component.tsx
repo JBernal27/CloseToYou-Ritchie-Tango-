@@ -1,18 +1,18 @@
   import React from 'react';
   import { View, Text } from 'react-native';
-  import MapView, { MapPressEvent, Marker, Region } from 'react-native-maps';
+  import MapView, { LatLng, MapPressEvent, Marker, Region } from 'react-native-maps';
   import { addContactStyles } from '../styles/add-contact.styles';
 
   interface Props {
-    location: Region;
-    setLocation: React.Dispatch<React.SetStateAction<Region>>;
+    location: LatLng;
+    setLocation: React.Dispatch<React.SetStateAction<LatLng>>;
   }
 
   export default function MapSelector({ location, setLocation }: Props): JSX.Element {
     const initialRegion: Region = {
       ...location,
-      latitudeDelta: location.latitudeDelta || 0.01,
-      longitudeDelta: location.longitudeDelta || 0.01,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
     };
 
     const handleMapPress = (event: MapPressEvent): void => {
@@ -21,8 +21,6 @@
       setLocation({
         latitude,
         longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
       });
     };
 

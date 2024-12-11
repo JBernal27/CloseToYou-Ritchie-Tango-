@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ISettings } from '../interfaces/settings.interface';
+import { LatLng } from 'react-native-maps';
 
 const SETTINGS_KEY = 'settings';
 
@@ -38,6 +39,25 @@ export class SettingsService {
       await this.saveSettings(defaultSettings);
     } catch (error) {
       console.error('Error al restablecer configuración:', error);
+    }
+  }
+
+  static async saveSession(id: number, token: string, userDetails: { name: string, email: string, phoneNumber: string, location: LatLng }): Promise<ISettings | undefined> {
+    try {
+      const settings: ISettings = {
+        id,
+        name: userDetails.name,
+        email: userDetails.email,
+        phoneNumber: userDetails.phoneNumber,
+        isFirstTime: false,
+        location: userDetails.location,
+        token,
+        wantsBackup: true,
+      };
+      await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      return settings;
+    } catch (error) {
+      console.error('Error al guardar la sesión:', error);
     }
   }
 }

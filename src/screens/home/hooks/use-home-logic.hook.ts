@@ -9,6 +9,7 @@ export function useHomeLogic() {
   const [contacts, setContacts] = useState<IContact[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<IContact[]>([]);
   const [searchText, setSearchText] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
   const focused = useIsFocused();
 
   const requestLocationPermission = async () => {
@@ -61,12 +62,15 @@ export function useHomeLogic() {
 
   const getContacts = async () => {
     try {
+      setIsLoading(true);
       const savedContacts = await ContactsService.getContacts();
       if (savedContacts) {
         setContacts(savedContacts);
         setFilteredContacts(savedContacts);
+        setIsLoading(false);
       }
     } catch (error) {
+      setIsLoading(false);
       console.error('Error al cargar los contactos:', error);
     }
   };
@@ -114,5 +118,6 @@ export function useHomeLogic() {
     sections,
     searchText,
     handleSearch,
+    isLoading,
   };
 }

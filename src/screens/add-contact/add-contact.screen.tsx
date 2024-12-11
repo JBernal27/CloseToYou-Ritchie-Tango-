@@ -9,6 +9,7 @@ import { addContactStyles } from './styles/add-contact.styles';
 import MapSelector from './components/map-selector.component';
 import { Controller } from 'react-hook-form';
 import { RootStackParamList } from '../../router/navigations';
+import Loader from '../../utilities/loader.utility';
 
 type AddContactProps = NativeStackScreenProps<RootStackParamList, 'AddContact'>;
 
@@ -26,9 +27,12 @@ export const AddContact: React.FC<AddContactProps> = ({ route }) => {
     location,
     setLocation,
     image,
+    isLoading,
   } = useAddContact(contact);
 
-  console.log(image);
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <ScrollView contentContainerStyle={addContactStyles.container}>

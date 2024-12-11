@@ -8,14 +8,16 @@ import { RootStackParamList } from '../../router/navigations';
 import { useHomeLogic } from './hooks/use-home-logic.hook';
 import { homeStyles } from './styles/home.styles';
 import { BottomNavBar } from './components/navbar.component';
+import Loader from '../../utilities/loader.utility';
 
 
 export default function Home() {
     const navigate = useNavigation<NavigationProp<RootStackParamList>>();
-    const { sections, searchText, handleSearch } = useHomeLogic();
+    const { sections, searchText, handleSearch, isLoading } = useHomeLogic();
 
     return (
         <SafeAreaView>
+            {isLoading && <Loader />}
             <View style={homeStyles.container}>
                 <TextInput
                     style={homeStyles.input}

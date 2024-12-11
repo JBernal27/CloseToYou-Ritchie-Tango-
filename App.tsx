@@ -1,5 +1,7 @@
 import React from 'react';
 import { Navigation } from './src/router/navigations';
+import { GlobalProvider } from './src/utilities/global.context';
+import Snackbar from './src/utilities/components/snackbar.utility';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function App(): React.JSX.Element {
@@ -11,7 +13,10 @@ function App(): React.JSX.Element {
   // borrar();
 
   return (
-    <Navigation/>
+    <GlobalProvider>
+      <Navigation/>
+      <Snackbar />
+    </GlobalProvider>
   );
 }
 
